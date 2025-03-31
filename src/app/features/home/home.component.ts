@@ -60,8 +60,8 @@ export class HomeComponent implements OnInit {
   loadMovies() {
     this.loading = true;
     this.movieService.getPopularMovies().subscribe({
-      next: (res: any) => {
-        this.movies = res.results;
+      next: (movies: any[]) => {
+        this.movies = movies;
         this.featuredMovie = this.movies[0];
         this.loading = false;
       },
@@ -102,10 +102,10 @@ export class HomeComponent implements OnInit {
       this.loadMovies();
     } else {
       this.loading = true;
-      this.movieService.getMoviesByGenre(genreId).subscribe({
-        next: (res: any) => {
-          this.movies = res.results;
-          this.featuredMovie = this.movies[0];
+      this.movieService.getPopularMovies().subscribe({
+        next: (res: any[]) => {
+          this.movies = res;
+          this.featuredMovie = res[0]; // opcional
           this.loading = false;
         },
         error: () => {
