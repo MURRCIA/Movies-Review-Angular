@@ -1,0 +1,92 @@
+<div class="min-h-screen transition-colors duration-300" [ngClass]="darkMode ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'">
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-10 py-4 px-6 flex items-center justify-between" [ngClass]="darkMode ? 'bg-gray-800' : 'bg-white shadow-md'">
+    <div class="flex items-center">
+      <h1 class="text-2xl font-bold">MovieInfo</h1>
+      <button 
+        (click)="toggleTheme()" 
+        class="ml-4 p-2 rounded-full" 
+        [ngClass]="darkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-200 hover:bg-gray-300'"
+      >
+        <svg *ngIf="darkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <svg *ngIf="!darkMode" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+        </svg>
+      </button>
+    </div>
+    <div class="w-1/2 max-w-md">
+      <div class="relative">
+        <input 
+          type="text" 
+          [formControl]="searchControl" 
+          placeholder="Search movies..." 
+          class="w-full px-4 py-2 rounded-full focus:outline-none focus:ring-2 transition-all duration-300" 
+          [ngClass]="darkMode ? 'bg-gray-700 focus:ring-red-500 text-white' : 'bg-gray-200 focus:ring-red-500 text-gray-900'"
+        >
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute right-3 top-1/2 transform -translate-y-1/2" [ngClass]="darkMode ? 'text-gray-300' : 'text-gray-500'" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section with Featured Movie -->
+  <div *ngIf="featuredMovie" class="relative w-full h-96 overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent to-gray-900"></div>
+    <div 
+      class="absolute inset-0 bg-cover bg-center"
+      [style.background-image]="'url(' + (featuredMovie.backdrop_path ? environment.imageBaseUrl + '/' + environment.backdropSize + featuredMovie.backdrop_path : 'assets/images/no-backdrop.jpg') + ')'"
+    ></div>
+    <div class="absolute bottom-0 left-0 p-8 w-full">
+      <h2 class="text-4xl font-bold text-white mb-2">{{ featuredMovie.title }}</h2>
+      <p class="text-white text-lg max-w-3xl line-clamp-2">{{ featuredMovie.overview }}</p>
+      <button class="mt-4 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-lg transition-colors duration-300">
+        View Details
+      </button>
+    </div>
+  </div>
+
+  <!-- Genre Filter -->
+  <div class="container mx-auto px-4 py-6">
+    <div class="flex items-center space-x-2 overflow-x-auto pb-4">
+      <button 
+        (click)="filterByGenre(null)" 
+        class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300"
+        [ngClass]="selectedGenre === null ? 'bg-red-600 text-white' : (darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800')"
+      >
+        All
+      </button>
+      <button 
+        *ngFor="let genre of genres" 
+        (click)="filterByGenre(genre.id)" 
+        class="px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all duration-300"
+        [ngClass]="selectedGenre === genre.id ? 'bg-red-600 text-white' : (darkMode ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-800')"
+      >
+        {{ genre.name }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="container mx-auto px-4 py-8 flex justify-center">
+    <div class="inline-block animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-red-600"></div>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error" class="container mx-auto px-4 py-8">
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+      <strong class="font-bold">Error!</strong>
+      <span class="block sm:inline"> Unable to load movies. Please try again later.</span>
+    </div>
+  </div>
+
+  <!-- Movie Grid -->
+<div *ngIf="!loading && !error" class="container mx-auto px-4 py-8">
+  <h2 class="text-2xl font-bold mb-6">{{ genreTitle }}</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+    <app-movie-card *ngFor="let movie of movies" [movie]="movie"></app-movie-card>
+  </div>
+</div>
+</div>  

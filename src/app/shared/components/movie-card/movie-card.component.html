@@ -1,0 +1,9 @@
+<a [routerLink]="['/movie', movie.id]" class="block transition-transform transform hover:scale-105">
+  <div class="rounded-lg overflow-hidden shadow-lg">
+    <img [src]="posterUrl" [alt]="movie.title" class="w-full h-auto object-cover">
+    <div class="p-4">
+      <h3 class="text-lg font-semibold mb-1 line-clamp-1">{{ movie.title }}</h3>
+      <p class="text-sm text-gray-500">{{ movie.release_date | date:'yyyy' }}</p>
+    </div>
+  </div>
+</a>

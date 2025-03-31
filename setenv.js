@@ -9,7 +9,11 @@ export const environment = {
   production: false,
   tmdbApiKey: '${process.env.TMDB_API_KEY}',
   tmdbAccessToken: '${process.env.TMDB_ACCESS_TOKEN}',
-  apiUrl: 'https://api.themoviedb.org/3'
+  apiKey: '${process.env.TMDB_API_KEY}', // 
+  apiUrl: 'https://api.themoviedb.org/3',
+  imageBaseUrl: 'https://image.tmdb.org/t/p/',
+  posterSize: 'w500',
+  backdropSize: 'w780'
 };
 `;
 
